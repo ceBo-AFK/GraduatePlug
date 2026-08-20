@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>GraduatePlug - Jobs, Internships, Learnerships ,WIL Placement,& Bursaries</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#f5f7fa;color:#333;padding-bottom:125px}
+header{background:#0A4D68;color:white;padding:25px 15px;text-align:center}
+header h1{font-size:28px}
+header p{opacity:.9;font-size:14px;margin-top:5px}
+.ad-space{background:white;margin:10px 15px;padding:12px;text-align:center;font-size:13px;color:#555;border-radius:8px;border:1px dashed #0A4D68}
+.search{background:white;padding:15px;margin:15px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.search input,.search select{padding:12px;border:1px solid #ddd;border-radius:8px;width:100%;margin:6px 0;font-size:14px}
+.search button{background:#0A4D68;color:white;border:none;padding:12px;border-radius:8px;width:100%;font-weight:bold;font-size:15px;cursor:pointer}
+.tabs{display:flex;gap:8px;padding:0 15px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:10px 14px;background:white;border-radius:20px;cursor:pointer;border:2px solid #0A4D68;color:#0A4D68;font-weight:600;white-space:nowrap;font-size:13px}
+.tab.active{background:#0A4D68;color:white}
+.section-title{padding:20px 15px 5px;font-size:20px;color:#0A4D68}
+.grid{display:grid;grid-template-columns:1fr;gap:12px;padding:15px}
+.card{background:white;padding:16px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.08);border-left:4px solid #0A4D68}
+.card h3{font-size:16px;margin-bottom:7px}
+.card p{font-size:13px;color:#555;margin:5px 0;line-height:1.5}
+.type{display:inline-block;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;margin-bottom:8px}
+.job{background:#E0F2F1;color:#00695C}
+.internship{background:#E3F2FD;color:#1565C0}
+.learnership{background:#FFF3E0;color:#E65100}
+.bursary{background:#F3E5F5;color:#6A1B9A}
+.wil{background:#E8F5E9;color:#2E7D32}
+.public-card{border-left-color:#7C3AED}
+.advertise-card{border-left:4px solid #F59E0B;text-align:center;margin:0;border-radius:0;box-shadow:none;padding:12px 16px}
+.advertise-fixed{position:fixed;left:50%;transform:translateX(-50%);bottom:10px;z-index:500;width:calc(100% - 24px);max-width:900px;background:transparent;padding:0;box-shadow:0 6px 24px rgba(0,0,0,.14);border-radius:16px;overflow:hidden}
+.advertise-fixed .section-title{padding:12px 16px 6px;background:white;margin:0;font-size:18px}
+.advertise-fixed .grid{padding:0;background:white}
+.section{margin-top:9px;font-size:13px;line-height:1.5}
+.description{margin-top:10px;padding:12px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;color:#444;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+.section b{color:#0A4D68}
+.btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.apply{flex:1;text-align:center;padding:10px;background:#0A4D68;color:white;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;min-width:120px}
+.feature-btn{flex:1;text-align:center;padding:10px;background:#22C55E;color:white;text-decoration:none;border-radius:8px;font-size:13px;font-weight:600;min-width:120px}
+.advertise-card .btns{justify-content:center;margin-top:8px}
+.advertise-card .feature-btn{max-width:260px}
+.loading{text-align:center;padding:30px;color:#666}
+.error{color:#b00020;text-align:center;padding:20px;background:white;border-radius:10px}
+.empty{text-align:center;padding:20px;color:#777;background:white;border-radius:10px}
+.status{text-align:center;font-size:12px;color:#777;padding:5px 15px}
+footer{text-align:center;padding:25px;color:#777;font-size:12px}
+@media(min-width:700px){
+.grid{grid-template-columns:repeat(2,1fr)}
+.search{max-width:900px;margin:15px auto}
+.tabs{max-width:900px;margin:auto}
+.section-title{max-width:900px;margin:auto}
+.grid{max-width:900px;margin:auto}
+.ad-space{max-width:900px;margin:10px auto}
+}
+
+15%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.25) rotate(var(--r))}}
+.advertisements-empty{padding:14px 16px;text-align:center;background:white;color:#64748b;font-size:13px}
+.advertisement-item{background:white;padding:12px 16px;border-top:1px solid #eef2f7}
+.advertisement-item img{display:block;width:100%;max-height:150px;object-fit:cover;border-radius:10px;margin-bottom:10px}
+.advertisement-item h3{font-size:16px;color:#0A4D68;margin-bottom:5px}
+.advertisement-item p{font-size:13px;color:#555;line-height:1.5;white-space:pre-wrap}
+.advertisement-item .btns{margin-top:9px}
+.advertisement-item .feature-btn{max-width:260px}
+.advertise-cta{background:white;padding:10px 16px 14px;border-top:1px solid #eef2f7;text-align:center}
+.advertise-whatsapp{display:inline-block;max-width:320px;text-decoration:none}
+.filter-summary{font-size:12px;color:#64748b;padding:0 15px 8px;text-align:center}
+
+.headliners-grid{display:grid;grid-template-columns:1fr;gap:12px;padding:15px}
+.headliner-card{background:white;padding:16px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.08);border-left:4px solid #F59E0B}
+.headliner-card img{width:100%;max-height:190px;object-fit:cover;border-radius:9px;margin-bottom:10px}
+.headliner-card h3{font-size:17px;color:#0A4D68;margin-bottom:7px}
+.headliner-card p{font-size:13px;color:#555;line-height:1.6;margin:5px 0;white-space:pre-wrap}
+.headliner-meta{font-size:11px;color:#64748b;margin-bottom:7px}
+.headliner-card a{display:inline-block;margin-top:9px;padding:9px 13px;background:#0A4D68;color:white;text-decoration:none;border-radius:8px;font-size:13px;font-weight:700}
+
+.site-footer{background:#0A4D68;color:white;margin-top:35px;padding:30px 15px 25px}
+.site-footer-inner{max-width:1000px;margin:auto}
+.footer-mission{font-size:13px;line-height:1.65;opacity:.95;margin-bottom:22px}
+.footer-columns{display:grid;grid-template-columns:1fr;gap:24px}
+.footer-column h3{font-size:15px;margin-bottom:10px}
+.footer-column ul{list-style:none;padding:0;margin:0}
+.footer-column li{margin:7px 0}
+.footer-column a{color:white;text-decoration:none;font-size:13px;opacity:.9}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.2);margin-top:25px;padding-top:15px;text-align:center;font-size:12px;opacity:.85}
+@media(min-width:700px){.headliners-grid{grid-template-columns:repeat(2,1fr);max-width:900px;margin:auto}.footer-columns{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+</div>
+
+<header>
+<h1>GraduatePlug</h1>
+<p>Your Plug for Jobs, Internships, Learnerships ,WIL Placement& Bursaries in SA</p>
+</header>
+
+<div class="ad-space"></div>
+
+<div id="connectionStatus" class="status">
+Connecting to GraduatePlug...
+</div>
+
+<div class="search">
+<input type="text" id="searchInput" placeholder="Search skills, title or keyword" autocomplete="off">
+
+<select id="provinceFilter">
+<option value="">All Provinces</option>
+<option value="Mpumalanga">Mpumalanga</option>
+<option value="Limpopo">Limpopo</option>
+<option value="Gauteng">Gauteng</option>
+<option value="KZN">KZN</option>
+<option value="Western Cape">Western Cape</option>
+<option value="Eastern Cape">Eastern Cape</option>
+<option value="Free State">Free State</option>
+<option value="North West">North West</option>
+<option value="Northern Cape">Northern Cape</option>
+<option value="All">All Provinces / National</option>
+</select>
+
+<input type="text" id="requirementsFilter" placeholder="Filter by requirement / qualification" autocomplete="off">
+
+<select id="sortFilter">
+<option value="latest">Sort: Latest Posted</option>
+<option value="closingSoon">Sort: Closing Soon</option>
+<option value="province">Sort: Province A-Z</option>
+<option value="type">Sort: Opportunity Type A-Z</option>
+<option value="title">Sort: Title A-Z</option>
+</select>
+
+<button type="button" id="searchButton">Search / Filter</button>
+</div>
+
+<div class="tabs">
+<div class="tab active" data-type="All">All</div>
+<div class="tab" data-type="Job">Jobs</div>
+<div class="tab" data-type="Internship">Internships</div>
+<div class="tab" data-type="Learnership">Learnerships</div>
+<div class="tab" data-type="Bursary">Bursaries</div>
+<div class="tab" data-type="WIL">WIL</div>
+</div>
+
+<h2 class="section-title">Headliners</h2>
+<div class="headliners-grid" id="headlinersGrid"><div class="loading">Loading headliners...</div></div>
+
+<h2 class="section-title">Latest Opportunities</h2>
+<div class="grid" id="opportunityGrid">
+<div class="loading">Loading opportunities...</div>
+</div>
+
+<h2 class="section-title">Public Notices</h2>
+<div class="grid" id="publicGrid">
+<div class="loading">Loading public notices...</div>
+</div>
+
+<div class="advertise-fixed">
+<div id="advertisementGrid">
+<div class="advertisements-empty">Loading advertisements...</div>
+</div>
+<div class="advertise-cta">
+<a href="https://wa.me/27726952890?text=Hi%2C%20I%20want%20to%20advertise%20my%20business%20on%20GraduatePlug."
+   target="_blank" rel="noopener noreferrer" class="feature-btn advertise-whatsapp">
+   Advertise Here
+</a>
+</div>
+</div>
+
+
+<footer class="site-footer">
+<div class="site-footer-inner">
+<div class="footer-columns">
+<div class="footer-column"><h3>Quick Links</h3><ul>
+<li><a href="About_Us.html">About Us</a></li><li><a href="Contact_Us.html">Contact Us</a></li>
+<li><a href="Create_Job_Alert.html">Create Job Alert</a></li><li><a href="Create_and_Download_My_CV.html">Create &amp; Download My CV</a></li>
+<li><a href="FAQ.html">FAQ</a></li><li><a href="Terms_and_Conditions.html">Terms &amp; Conditions</a></li>
+<li><a href="Privacy_Policy.html">Privacy Policy</a></li><li><a href="Data_Removal.html">Data Removal</a></li>
+</ul></div>
+<div class="footer-column"><h3>Categories</h3><ul>
+<li><a href="Graduate_Programmes.html">Graduate Programmes</a></li><li><a href="Internships.html">Internships</a></li>
+<li><a href="Learnerships.html">Learnerships</a></li><li><a href="Vacation_Work.html">Vacation Work</a></li>
+<li><a href="Entry_Level_Jobs.html">Entry Level Jobs</a></li><li><a href="Bursaries.html">Bursaries</a></li>
+<li><a href="Interview_Questions.html">Interview Questions</a></li>
+</ul></div>
+<div class="footer-column"><h3>GraduatePlug</h3><ul>
+<li><a href="Index.html">Home</a></li><li><a href="Contact_Us.html">Advertise With Us</a></li>
+<li><a href="FAQ.html">Help &amp; FAQs</a></li><li><a href="Privacy_Policy.html">Your Privacy</a></li>
+</ul></div></div>
+<div class="footer-bottom">© 2026 GraduatePlug.co.za | Contact: Cebonizer@gmail.com</div>
+</div></footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCJZWhLYYjvXRTJU5qK_P-3_IDYJW80TKs",
+    authDomain: "graduateplug-5ced9.firebaseapp.com",
+    databaseURL: "https://graduateplug-5ced9-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "graduateplug-5ced9",
+    storageBucket: "graduateplug-5ced9.firebasestorage.app",
+    messagingSenderId: "72019950240",
+    appId: "1:72019950240:web:4657b476d4421d636ae7c5"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let allOpportunities = [];
+let allPublic = [];
+let allAdvertisements = [];
+let allHeadliners = [];
+let advertisementMedia = [];
+let advertisementMediaRotationIndex = 0;
+let advertisementMediaRotationTimer = null;
+let currentType = "All";
+
+function escapeHTML(value){
+    if(value === undefined || value === null) return "";
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+function safeURL(value){
+    const url = String(value || "").trim();
+    return (url.startsWith("https://") || url.startsWith("http://")) ? url : "";
+}
+
+function cleanArray(data){
+    if(!data || typeof data !== "object") return [];
+    if(data.Title || data.Type || data.Qualification || data.Category || data.Description){
+        return [{...data}];
+    }
+    return Object.entries(data)
+        .filter(([id,item]) => item && typeof item === "object")
+        .map(([id,item]) => ({...item, _firebaseId:id}));
+}
+
+function status(text){
+    document.getElementById("connectionStatus").textContent = text;
+}
+
+
+
+onValue(ref(db,"Opportunities"), snapshot => {
+    const data = snapshot.val();
+    console.log("Firebase Opportunities:", data);
+    allOpportunities = cleanArray(data);
+    renderOpportunities();
+    status("Connected to GraduatePlug");
+}, error => {
+    console.error("Firebase Opportunities error:", error);
+    document.getElementById("opportunityGrid").innerHTML =
+        `<div class="error">Unable to load opportunities.<br><br>Firebase error: ${escapeHTML(error.message)}</div>`;
+    status("Firebase connection error");
+});
+
+onValue(ref(db,"Public"), snapshot => {
+    const data = snapshot.val();
+    console.log("Firebase Public:", data);
+    allPublic = cleanArray(data);
+    renderPublic();
+}, error => {
+    console.error("Firebase Public error:", error);
+    document.getElementById("publicGrid").innerHTML =
+        '<div class="empty">Public notices are unavailable.</div>';
+});
+
+onValue(ref(db,"Headliners"), snapshot => {
+    allHeadliners = cleanArray(snapshot.val());
+    renderHeadliners();
+}, error => {
+    console.error("Firebase Headliners error:", error);
+    document.getElementById("headlinersGrid").innerHTML = '<div class="empty">Headliners are unavailable right now.</div>';
+});
+
+onValue(ref(db,"Advertisements"), snapshot => {
+    const data = snapshot.val();
+    console.log("Firebase Advertisements:", data);
+    allAdvertisements = cleanArray(data);
+    renderAdvertisements();
+}, error => {
+    console.error("Firebase Advertisements error:", error);
+    document.getElementById("advertisementGrid").innerHTML =
+        '<div class="advertisements-empty">Advertisements are unavailable right now.</div>';
+});
+
+// Exact Firebase node used by the Admin Advertisement Media uploader:
+// Advertisement Media
+//   Description
+//   Media
+//   Media category
+//   Media type
+//   Title
+onValue(ref(db,"Advertisement Media"), snapshot => {
+    const data = snapshot.val();
+
+    // Supports both the old single Advertisement Media record and the new
+    // unlimited child-record structure.
+    if(data && typeof data === "object" && data.Media){
+        advertisementMedia = [data];
+    }else if(data && typeof data === "object"){
+        advertisementMedia = Object.entries(data)
+            .filter(([id,item]) => item && typeof item === "object" && item.Media)
+            .map(([id,item]) => ({...item, _firebaseId:id}));
+    }else{
+        advertisementMedia = [];
+    }
+
+    advertisementMediaRotationIndex = 0;
+    console.log("Firebase Advertisement Media:", advertisementMedia);
+    renderAdvertisements();
+}, error => {
+    console.error("Firebase Advertisement Media error:", error);
+    advertisementMedia = [];
+    renderAdvertisements();
+});
+
+document.querySelectorAll(".tab").forEach(tab => {
+    tab.addEventListener("click", function(){
+        currentType = this.dataset.type;
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        this.classList.add("active");
+        renderOpportunities();
+    });
+});
+
+function parseClosingDate(value){
+    const text = String(value || "").trim();
+    if(!text) return Number.POSITIVE_INFINITY;
+
+    const direct = new Date(text);
+    if(!Number.isNaN(direct.getTime())) return direct.getTime();
+
+    const match = text.match(/(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);
+    if(match){
+        let year = Number(match[3]);
+        if(year < 100) year += 2000;
+        const date = new Date(year, Number(match[2])-1, Number(match[1]));
+        if(!Number.isNaN(date.getTime())) return date.getTime();
+    }
+
+    const monthMatch = text.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/);
+    if(monthMatch){
+        const date = new Date(`${monthMatch[1]} ${monthMatch[2]} ${monthMatch[3]}`);
+        if(!Number.isNaN(date.getTime())) return date.getTime();
+    }
+
+    return Number.POSITIVE_INFINITY;
+}
+
+function renderHeadliners(){
+    const container = document.getElementById("headlinersGrid");
+    if(allHeadliners.length === 0){
+        container.innerHTML = '<div class="empty">No headliners posted yet.</div>';
+        return;
+    }
+    const sorted = [...allHeadliners].sort((a,b) =>
+        String(b.createdAt || b.updatedAt || "").localeCompare(String(a.createdAt || a.updatedAt || ""))
+    );
+    container.innerHTML = sorted.map(item => {
+        const title = item.Title || "GraduatePlug Headliner";
+        const category = item.Category || "";
+        const summary = item.Summary || item.Description || "";
+        const image = safeURL(item.Image);
+        const link = safeURL(item.Link);
+        return `<article class="headliner-card">
+        ${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(title)}" loading="lazy">` : ""}
+        ${category ? `<div class="headliner-meta">${escapeHTML(category)}</div>` : ""}
+        <h3>${escapeHTML(title)}</h3>
+        ${summary ? `<p>${escapeHTML(summary)}</p>` : ""}
+        ${link ? `<a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer">Read More</a>` : ""}
+        </article>`;
+    }).join("");
+}
+
+function renderOpportunities(){
+    const search = document.getElementById("searchInput").value.trim().toLowerCase();
+    const province = document.getElementById("provinceFilter").value.trim().toLowerCase();
+    const requirementFilter = document.getElementById("requirementsFilter").value.trim().toLowerCase();
+    const sortMode = document.getElementById("sortFilter").value;
+
+    const filtered = [...allOpportunities].filter(job => {
+        const type = String(job.Type || "").trim();
+        const jobProvince = String(job.Province || "").trim();
+
+        const searchable = (
+            String(job.Title || "")+" "+
+            String(job.Qualification || "")+" "+
+            String(job.Description || "")+" "+
+            String(job.Requirements || "")+" "+
+            String(job.Province || "")+" "+
+            String(job.Type || "")+" "+
+            String(job.Closing || "")
+        ).toLowerCase();
+
+        const requirementSearch = (
+            String(job.Requirements || "")+" "+
+            String(job.Qualification || "")
+        ).toLowerCase();
+
+        const normalizedProvince = jobProvince.toLowerCase();
+
+        const typeMatch = currentType === "All" || type.toLowerCase() === currentType.toLowerCase();
+        const provinceMatch =
+            province === "" ||
+            normalizedProvince === province ||
+            normalizedProvince === "all" ||
+            normalizedProvince === "national" ||
+            normalizedProvince === "south africa";
+
+        const searchMatch = searchable.includes(search);
+        const requirementMatch = requirementFilter === "" || requirementSearch.includes(requirementFilter);
+
+        return typeMatch && provinceMatch && searchMatch && requirementMatch;
+    });
+
+    filtered.sort((a,b) => {
+        if(sortMode === "closingSoon"){
+            return parseClosingDate(a.Closing) - parseClosingDate(b.Closing);
+        }
+        if(sortMode === "province"){
+            return String(a.Province || "ZZZ").localeCompare(String(b.Province || "ZZZ"));
+        }
+        if(sortMode === "type"){
+            return String(a.Type || "ZZZ").localeCompare(String(b.Type || "ZZZ"));
+        }
+        if(sortMode === "title"){
+            return String(a.Title || "").localeCompare(String(b.Title || ""));
+        }
+
+        const ad = String(a.createdAt || a.updatedAt || "");
+        const bd = String(b.createdAt || b.updatedAt || "");
+        return bd.localeCompare(ad);
+    });
+
+    const container = document.getElementById("opportunityGrid");
+
+    if(filtered.length === 0){
+        container.innerHTML = '<div class="empty">No opportunities match your filters.</div>';
+        return;
+    }
+
+    let html = "";
+
+    filtered.forEach(job => {
+        const type = String(job.Type || "Opportunity").trim();
+        const typeClass = type.toLowerCase().replace(/[^a-z]/g,"");
+        let applyButton = "";
+
+        const link = safeURL(job.Link);
+        if(link){
+            applyButton = `<a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer" class="apply">Apply Now</a>`;
+        }
+
+        html += `
+        <div class="card">
+            <span class="type ${typeClass}">${escapeHTML(type.toUpperCase())}</span>
+            <h3>${escapeHTML(job.Title || "Opportunity")}</h3>
+            ${job.Province ? `<p><b>Province:</b> ${escapeHTML(job.Province)}</p>` : ""}
+            ${job.Qualification ? `<p><b>Qualification:</b> ${escapeHTML(job.Qualification)}</p>` : ""}
+            ${job.Closing ? `<p><b>Closing:</b> ${escapeHTML(job.Closing)}</p>` : ""}
+            ${job.Description ? `<div class="description">${escapeHTML(job.Description)}</div>` : ""}
+            ${job.Requirements ? `<div class="section"><b>Requirements:</b><br>${escapeHTML(job.Requirements)}</div>` : ""}
+            <div class="btns">${applyButton}</div>
+        </div>`;
+    });
+
+    container.innerHTML = html;
+}
+function renderPublic(){
+    const container = document.getElementById("publicGrid");
+
+    if(allPublic.length === 0){
+        container.innerHTML = '<div class="empty">No public notices available yet.</div>';
+        return;
+    }
+
+    let html = "";
+
+    allPublic.forEach(post => {
+        const link = safeURL(post.Link);
+        const button = link ? `
+            <div class="btns">
+                <a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer" class="apply">View More</a>
+            </div>` : "";
+
+        html += `
+        <div class="card public-card">
+            <h3>${escapeHTML(post.Title || "Public Notice")}</h3>
+            ${post.Category ? `<p>Category: ${escapeHTML(post.Category)}</p>` : ""}
+            ${post.Location ? `<p>Location: ${escapeHTML(post.Location)}</p>` : ""}
+            ${post.DatePosted ? `<p>Posted: ${escapeHTML(post.DatePosted)}</p>` : ""}
+            ${post.Description ? `<p>${escapeHTML(post.Description)}</p>` : ""}
+            ${button}
+        </div>`;
+    });
+
+    container.innerHTML = html;
+}
+
+function renderAdvertisementMediaSlide(){
+    const stage = document.getElementById("advertisementMediaStage");
+    const titleEl = document.getElementById("advertisementMediaTitle");
+    const descriptionEl = document.getElementById("advertisementMediaDescription");
+
+    if(!stage) return;
+
+    const item = advertisementMedia[advertisementMediaRotationIndex];
+    if(!item || !safeURL(item.Media)){
+        stage.innerHTML = "";
+        if(titleEl) titleEl.textContent = "";
+        if(descriptionEl) descriptionEl.textContent = "";
+        return;
+    }
+
+    const url = safeURL(item.Media);
+    const type = String(item["Media type"] || "").toLowerCase();
+    const title = item.Title && item.Title !== "..." ? item.Title : "";
+    const description = item.Description && item.Description !== "..." ? item.Description : "";
+
+    if(type === "video"){
+        stage.innerHTML = `
+            <video src="${escapeHTML(url)}"
+                controls preload="metadata" playsinline
+                style="display:block;width:100%;max-height:220px;object-fit:contain;background:#0f172a;border-radius:10px;margin-bottom:10px;"></video>`;
+    }else{
+        stage.innerHTML = `
+            <img src="${escapeHTML(url)}"
+                alt="${escapeHTML(title)}" loading="lazy"
+                style="display:block;width:100%;max-height:220px;object-fit:contain;border-radius:10px;margin-bottom:10px;">`;
+    }
+
+    if(titleEl) titleEl.textContent = title;
+    if(descriptionEl) descriptionEl.textContent = description;
+}
+
+function startAdvertisementMediaRotation(){
+    if(advertisementMediaRotationTimer){
+        clearInterval(advertisementMediaRotationTimer);
+        advertisementMediaRotationTimer = null;
+    }
+
+    if(advertisementMedia.length <= 1) return;
+
+    advertisementMediaRotationTimer = setInterval(() => {
+        advertisementMediaRotationIndex =
+            (advertisementMediaRotationIndex + 1) % advertisementMedia.length;
+        renderAdvertisementMediaSlide();
+    }, 5000);
+}
+
+function renderAdvertisements(){
+    const container = document.getElementById("advertisementGrid");
+
+    const businessAds = [...allAdvertisements].sort((a,b) =>
+        String(b.createdAt || "").localeCompare(String(a.createdAt || ""))
+    );
+
+    const validMedia = advertisementMedia.filter(item => safeURL(item?.Media));
+    advertisementMedia = validMedia;
+
+    const hasMedia = advertisementMedia.length > 0;
+    const hasBusinessAds = businessAds.length > 0;
+
+    if(!hasMedia && !hasBusinessAds){
+        if(advertisementMediaRotationTimer){
+            clearInterval(advertisementMediaRotationTimer);
+            advertisementMediaRotationTimer = null;
+        }
+
+        container.innerHTML = `
+            <div class="advertisements-empty">
+                <a href="https://wa.me/27726952890?text=Hi%2C%20I%20want%20to%20advertise%20my%20business%20on%20GraduatePlug."
+                   target="_blank" rel="noopener noreferrer" class="feature-btn"
+                   style="display:inline-block;margin-top:9px;max-width:260px;">Advertise Here</a>
+            </div>`;
+        return;
+    }
+
+    let html = "";
+
+    if(hasMedia){
+        html += `
+            <div class="advertisement-item">
+                <div id="advertisementMediaStage"></div>
+                <h3 id="advertisementMediaTitle"></h3>
+                <p id="advertisementMediaDescription"></p>
+            </div>`;
+    }
+
+    // Existing business advertisements remain supported below the rotating media.
+    html += businessAds.map(ad => {
+        const business = (ad["Business name"] && ad["Business name"] !== "...") ? ad["Business name"] : ((ad.BusinessName && ad.BusinessName !== "...") ? ad.BusinessName : ((ad.businessName && ad.businessName !== "...") ? ad.businessName : ((ad.Title && ad.Title !== "...") ? ad.Title : "")));
+        const description = ad.Description || ad.description || "";
+        const link = safeURL(ad.Link || ad.link);
+
+        const image = safeURL(ad.Image || ad.image);
+        const video = safeURL(ad.Video || ad.video || ad.MediaUrl || ad.mediaUrl);
+        const oldMediaType = String(ad.MediaType || ad.mediaType || "").toLowerCase();
+
+        let oldMediaHTML = "";
+        if(video || oldMediaType === "video"){
+            const videoURL = video || image;
+            if(videoURL){
+                oldMediaHTML = `<video src="${escapeHTML(videoURL)}" controls preload="metadata" playsinline style="display:block;width:100%;max-height:180px;object-fit:contain;background:#0f172a;border-radius:10px;margin-bottom:10px;"></video>`;
+            }
+        }else if(image){
+            oldMediaHTML = `<img src="${escapeHTML(image)}" alt="${escapeHTML(business)}" loading="lazy">`;
+        }
+
+        return `
+            <div class="advertisement-item">
+                ${oldMediaHTML}
+                <h3>${escapeHTML(business)}</h3>
+                ${description ? `<p>${escapeHTML(description)}</p>` : ""}
+                ${link ? `<div class="btns"><a href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer" class="feature-btn">View Advertisement</a></div>` : ""}
+            </div>`;
+    }).join("");
+
+    container.innerHTML = html;
+
+    if(hasMedia){
+        renderAdvertisementMediaSlide();
+        startAdvertisementMediaRotation();
+    }else if(advertisementMediaRotationTimer){
+        clearInterval(advertisementMediaRotationTimer);
+        advertisementMediaRotationTimer = null;
+    }
+}
+
+
+document.getElementById("searchButton").addEventListener("click", renderOpportunities);
+document.getElementById("searchInput").addEventListener("input", renderOpportunities);
+document.getElementById("provinceFilter").addEventListener("change", renderOpportunities);
+document.getElementById("requirementsFilter").addEventListener("input", renderOpportunities);
+document.getElementById("sortFilter").addEventListener("change", renderOpportunities);
+</script>
+
+</body>
+</html>

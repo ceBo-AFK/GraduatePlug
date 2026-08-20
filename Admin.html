@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GraduatePlug Admin Panel</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#f5f7fa;color:#333;padding-bottom:30px}
+header{background:#0A4D68;color:white;padding:22px 20px;text-align:center}
+header h1{font-size:26px} header p{opacity:.9;font-size:14px;margin-top:5px}
+.container{max-width:1000px;margin:22px auto;padding:0 15px}
+.card{background:white;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-left:4px solid #0A4D68}
+.card h2{color:#0A4D68;margin-bottom:18px;font-size:20px}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.field{display:flex;flex-direction:column}.field.full{grid-column:1/-1}
+label{font-size:13px;font-weight:700;margin-bottom:6px;color:#334155}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;outline:none;background:white}
+input:focus,select:focus,textarea:focus{border-color:#0A4D68}
+textarea{min-height:120px;resize:vertical}
+.actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+button{border:0;border-radius:8px;padding:11px 16px;cursor:pointer;font-weight:700}
+.btn-primary{background:#0A4D68;color:white}.btn-secondary{background:#64748b;color:white}
+.btn-danger{background:#dc2626;color:white}.btn-edit{background:#f59e0b;color:white}
+button:hover{opacity:.9}.hidden{display:none}
+.message{padding:12px;border-radius:8px;margin-bottom:15px;display:none}
+.success{background:#dcfce7;color:#166534}.error{background:#fee2e2;color:#991b1b}
+.top-tools{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.top-tools input{flex:1;min-width:220px}.top-tools select{width:210px}
+.listing{border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin-bottom:12px}
+.listing h3{font-size:17px;margin-bottom:7px}.meta{color:#64748b;font-size:13px;margin-bottom:8px}
+.description{font-size:14px;line-height:1.55;margin:10px 0;white-space:pre-wrap}
+.requirements{font-size:13px;line-height:1.55;background:#f8fafc;padding:10px;border-radius:8px;margin-top:8px;white-space:pre-wrap}
+.badge{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:700;margin:2px 4px 2px 0}
+.job{background:#E0F2F1;color:#00695C}.internship{background:#E3F2FD;color:#1565C0}
+.learnership{background:#FFF3E0;color:#E65100}.bursary{background:#F3E5F5;color:#6A1B9A}
+.wil{background:#E8F5E9;color:#2E7D32}.public-badge{background:#EDE9FE;color:#6D28D9}
+.listing-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.empty{text-align:center;padding:30px;color:#64748b}
+.note{font-size:12px;color:#64748b;margin-top:7px;line-height:1.45}
+.section-divider{border:0;border-top:1px solid #e5e7eb;margin:25px 0}
+.status{text-align:center;color:#64748b;font-size:12px;margin-bottom:15px}
+@media(max-width:700px){.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.top-tools select{width:100%}}
+
+.advertisement-admin-preview{border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin-top:10px;background:#f8fafc}
+.advertisement-admin-preview img{max-width:100%;max-height:140px;object-fit:cover;border-radius:8px;margin-bottom:8px}
+
+.headliner-admin-card{border-left-color:#F59E0B}
+.media-upload-preview{display:block;width:100%;max-height:260px;object-fit:contain;border-radius:8px;background:#0f172a}
+.media-list-preview{display:block;width:100%;max-height:220px;object-fit:contain;border-radius:8px;background:#0f172a;margin:8px 0}
+.media-badge{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:700;margin:2px 4px 2px 0;background:#e0f2fe;color:#075985}
+.media-category-badge{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:700;margin:2px 4px 2px 0;background:#fef3c7;color:#92400e}
+
+</style>
+</head>
+<body>
+
+<header>
+<h1>GraduatePlug Admin Panel</h1>
+<p>Manage Opportunities, Mixed Imports, Advertisements & Public Notices</p>
+</header>
+
+<div class="container">
+<div id="connectionStatus" class="status">Connecting to GraduatePlug...</div>
+<div id="message" class="message"></div>
+
+<!-- OPPORTUNITIES -->
+<div class="card">
+<h2 id="opportunityFormTitle">Add Opportunity</h2>
+<form id="opportunityForm">
+<div class="form-grid">
+<div class="field full">
+<label>Title *</label>
+<input type="text" id="title" placeholder="e.g. Administrative Assistant Internship" required>
+</div>
+
+<div class="field">
+<label>Type *</label>
+<select id="type" required>
+<option value="">Select type</option>
+<option value="Job">Job</option>
+<option value="Internship">Internship</option>
+<option value="Learnership">Learnership</option>
+<option value="Bursary">Bursary</option>
+<option value="WIL">WIL</option>
+</select>
+</div>
+
+<div class="field">
+<label>Province</label>
+<select id="province">
+<option value="">Select province</option>
+<option>Mpumalanga</option>
+<option>Limpopo</option>
+<option>Gauteng</option>
+<option>KZN</option>
+<option>Western Cape</option>
+<option>Eastern Cape</option>
+<option>Free State</option>
+<option>North West</option>
+<option>Northern Cape</option>
+<option>All</option>
+</select>
+</div>
+
+<div class="field">
+<label>Qualification</label>
+<input type="text" id="qualification" placeholder="e.g. Grade 12, Diploma, Degree">
+</div>
+
+<div class="field">
+<label>Closing Date</label>
+<input type="text" id="closing" placeholder="e.g. 31 August 2026">
+</div>
+
+<div class="field full">
+<label>Application Link</label>
+<input type="url" id="link" placeholder="https://example.com/apply">
+</div>
+
+<div class="field full">
+<label>Description</label>
+<textarea id="description" placeholder="Enter the opportunity description..."></textarea>
+</div>
+
+<div class="field full">
+<label>Requirements</label>
+<textarea id="requirements" placeholder="Enter requirements, one per line if preferred..."></textarea>
+</div>
+</div>
+
+<p class="note">These field names match the public index page exactly: Title, Type, Province, Qualification, Closing, Description, Requirements and Link.</p>
+
+<div class="actions">
+<button class="btn-primary" type="submit" id="saveOpportunity">Add Opportunity</button>
+<button class="btn-secondary hidden" type="button" id="cancelOpportunity">Cancel Edit</button>
+</div>
+</form>
+</div>
+
+<div class="card">
+<h2>Opportunities</h2>
+<div class="top-tools">
+<input type="text" id="opportunitySearch" placeholder="Search opportunities...">
+<select id="opportunityFilter">
+<option value="">All Types</option>
+<option value="Job">Jobs</option>
+<option value="Internship">Internships</option>
+<option value="Learnership">Learnerships</option>
+<option value="Bursary">Bursaries</option>
+<option value="WIL">WIL</option>
+</select>
+<select id="provinceFilter">
+<option value="">All Provinces</option>
+<option>Mpumalanga</option><option>Limpopo</option><option>Gauteng</option>
+<option>KZN</option><option>Western Cape</option><option>Eastern Cape</option>
+<option>Free State</option><option>North West</option><option>Northern Cape</option>
+<option>All</option>
+</select>
+</div>
+<div id="opportunitiesContainer"><div class="empty">Loading opportunities...</div></div>
+</div>
+
+
+<hr class="section-divider">
+
+<!-- MIXED OPPORTUNITIES / SMART IMPORT -->
+<div class="card" id="mixedOpportunityCard">
+<h2>Quick Add Mixed Opportunities</h2>
+<p class="note">
+Paste mixed opportunity information below. Separate each opportunity with a blank line or a line containing
+<code>---</code>. The system will automatically detect the opportunity type, province, qualification,
+closing date, requirements and application link, then save each record into <strong>Opportunities</strong>
+and the matching category nodes (<strong>All / Job / Internship / Learnership / Bursary / WIL</strong>).
+</p>
+
+<form id="mixedOpportunityForm">
+<div class="field full">
+<label>Mixed Opportunity Text *</label>
+<textarea id="mixedOpportunityText" style="min-height:260px"
+placeholder="Example:
+
+Administrative Assistant Internship
+Internship
+Gauteng
+Qualification: Diploma in Office Administration
+Closing: 31 August 2026
+Requirements: Computer literacy, communication skills, South African citizen
+Apply: https://example.com/apply
+
+---
+
+Engineering Learnership
+Learnership
+Mpumalanga
+Requirements: Grade 12, Maths and Science
+Closing: 10 September 2026
+Apply: https://example.com/apply"></textarea>
+</div>
+
+<div class="actions">
+<button class="btn-primary" type="submit" id="saveMixedOpportunities">Add & Sort Mixed Opportunities</button>
+<button class="btn-secondary" type="button" id="previewMixedOpportunities">Preview Classification</button>
+</div>
+</form>
+
+<div id="mixedPreview" class="hidden" style="margin-top:15px"></div>
+</div>
+
+<hr class="section-divider">
+
+<!-- PUBLIC NOTICES -->
+<div class="card">
+<h2 id="publicFormTitle">Add Public Notice</h2>
+<form id="publicForm">
+<div class="form-grid">
+<div class="field full">
+<label>Title *</label>
+<input type="text" id="publicTitle" placeholder="e.g. Important GraduatePlug Notice" required>
+</div>
+
+<div class="field">
+<label>Category</label>
+<input type="text" id="publicCategory" placeholder="e.g. Announcement">
+</div>
+
+<div class="field">
+<label>Location</label>
+<input type="text" id="publicLocation" placeholder="e.g. South Africa">
+</div>
+
+<div class="field">
+<label>Date Posted</label>
+<input type="text" id="publicDatePosted" placeholder="e.g. 18 August 2026">
+</div>
+
+<div class="field full">
+<label>Link</label>
+<input type="url" id="publicLink" placeholder="https://example.com">
+</div>
+
+<div class="field full">
+<label>Description</label>
+<textarea id="publicDescription" placeholder="Enter the public notice..."></textarea>
+</div>
+</div>
+
+<p class="note">These fields match the Public data used by the index page: Title, Category, Location, DatePosted, Description and Link.</p>
+
+<div class="actions">
+<button class="btn-primary" type="submit" id="savePublic">Add Public Notice</button>
+<button class="btn-secondary hidden" type="button" id="cancelPublic">Cancel Edit</button>
+</div>
+</form>
+</div>
+
+<div class="card">
+<h2>Public Notices</h2>
+<div class="top-tools">
+<input type="text" id="publicSearch" placeholder="Search public notices...">
+</div>
+<div id="publicContainer"><div class="empty">Loading public notices...</div></div>
+</div>
+
+
+<hr class="section-divider">
+
+<!-- QUICK ADVERTISING BUTTON -->
+<div class="card" style="text-align:center;">
+<h2>Advertising</h2>
+<p class="note" style="margin-bottom:12px;">Post a business advertisement and it will appear automatically in the advertising area on the public Index page.</p>
+<button class="btn-primary" type="button" id="openAdvertisementForm">+ Post an Advertisement</button>
+</div>
+
+<!-- ADVERTISEMENTS -->
+<div class="card" id="advertisementFormCard">
+<h2 id="advertisementFormTitle">Add Advertisement</h2>
+<form id="advertisementForm">
+<div class="form-grid">
+
+<div class="field full">
+<label>Business name *</label>
+<input type="text" id="adBusinessName" placeholder="e.g. ABC Training Academy" required>
+</div>
+
+<div class="field">
+<label>Category</label>
+<input type="text" id="adCategory" placeholder="e.g. Training, Recruitment, Services">
+</div>
+
+<div class="field">
+<label>Contact</label>
+<input type="text" id="adContact" placeholder="Phone, WhatsApp or email">
+</div>
+
+<div class="field">
+<label>Location</label>
+<input type="text" id="adLocation" placeholder="e.g. Pretoria, Gauteng">
+</div>
+
+<div class="field">
+<label>Advertisement Link (optional)</label>
+<input type="url" id="adLink" placeholder="https://example.com">
+</div>
+
+<div class="field full">
+<label>Description (optional)</label>
+<textarea id="adDescription" placeholder="Tell visitors what your business offers..."></textarea>
+</div>
+
+<div class="field full">
+<label>Advertisement Media URL (image or video, optional)</label>
+<input type="url" id="adImage" placeholder="Cloudinary image/video URL">
+<p class="note">Upload the advert media in Media Manager using the <strong>Advertisements</strong> category, then paste the Cloudinary URL here. Existing Image URLs remain supported.</p>
+</div>
+
+</div>
+
+<p class="note">These fields match the Firebase <strong>Advertisements</strong> structure shown in your database: <strong>Business name, Category, Contact and Location</strong>. Optional fields add more information to the public advert.</p>
+
+<div class="actions">
+<button class="btn-primary" type="submit" id="saveAdvertisement">Add Advertisement</button>
+<button class="btn-secondary hidden" type="button" id="cancelAdvertisement">Cancel Edit</button>
+</div>
+</form>
+</div>
+
+
+
+<!-- CLOUDINARY MEDIA MANAGER -->
+<div class="card" id="mediaManagerCard">
+<h2>Advertisement Media</h2>
+<p class="note">
+Upload advertisement images or videos. Every upload is stored as a separate record under Advertisement Media, and the homepage rotates them automatically every 5 seconds.
+</p>
+
+<form id="mediaForm">
+<div class="form-grid">
+<div class="field">
+<label>Media Category</label>
+<input type="text" value="Advertisement" readonly id="mediaCategory">
+</div>
+
+<div class="field">
+<label>Media Type *</label>
+<select id="mediaType" required>
+<option value="">Select type</option>
+<option value="image">Image</option>
+<option value="video">Video</option>
+</select>
+</div>
+
+<div class="field full">
+<label>Title *</label>
+<input type="text" id="mediaTitle" placeholder="e.g. GraduatePlug Career Fair" required>
+</div>
+
+<div class="field full">
+<label>Description</label>
+<textarea id="mediaDescription" placeholder="Optional description for this media..."></textarea>
+</div>
+
+<div class="field full">
+<label>Choose Image / Video *</label>
+<input type="file" id="mediaFile" accept="image/*,video/*" required>
+<div class="note">Images and videos are supported. Maximum upload size is controlled by your Cloudinary account/settings.</div>
+</div>
+
+</div>
+
+<div id="mediaPreview" class="advertisement-admin-preview hidden"></div>
+
+<div class="actions">
+<button class="btn-primary" type="submit" id="uploadMedia">Upload Media</button>
+<button class="btn-secondary" type="button" id="clearMediaForm">Clear</button>
+</div>
+</form>
+</div>
+
+<div class="card">
+<h2>Uploaded Advertisement Media</h2>
+<div class="top-tools">
+<input type="text" id="mediaSearch" placeholder="Search uploaded media...">
+<select id="mediaCategoryFilter">
+<option value="Advertisement">Advertisements</option>
+</select>
+</div>
+<div id="mediaContainer"><div class="empty">Loading uploaded media...</div></div>
+</div>
+
+<hr class="section-divider">
+<div class="card headliner-admin-card" id="headlinerFormCard">
+<h2 id="headlinerFormTitle">Add Headliner</h2>
+<p class="note">Post a headline/highlight here and it will automatically appear in the Headliners section on the public Index page.</p>
+<form id="headlinerForm"><div class="form-grid">
+<div class="field full"><label>Headline *</label><input type="text" id="headlinerTitle" placeholder="e.g. New Graduate Opportunities Now Open" required></div>
+<div class="field"><label>Category</label><input type="text" id="headlinerCategory" placeholder="e.g. News, Career Advice, Opportunity"></div>
+<div class="field"><label>Image URL (optional)</label><input type="url" id="headlinerImage" placeholder="https://example.com/image.jpg"></div>
+<div class="field full"><label>Summary</label><textarea id="headlinerSummary" placeholder="Write a short headline summary..."></textarea></div>
+<div class="field full"><label>Read More Link (optional)</label><input type="url" id="headlinerLink" placeholder="https://example.com/article"></div>
+</div>
+<div class="actions"><button class="btn-primary" type="submit" id="saveHeadliner">Publish Headliner</button>
+<button class="btn-secondary hidden" type="button" id="cancelHeadliner">Cancel Edit</button></div>
+</form></div>
+<div class="card"><h2>Published Headliners</h2>
+<div class="top-tools"><input type="text" id="headlinerSearch" placeholder="Search headliners..."></div>
+<div id="headlinersContainer"><div class="empty">Loading headliners...</div></div></div>
+
+<div class="card">
+<h2>Advertisements</h2><p class="note">Live advertisements are stored under the Firebase <strong>Advertisements</strong> node and displayed automatically on Index.html.</p>
+<div class="top-tools">
+<input type="text" id="advertisementSearch" placeholder="Search advertisements...">
+</div>
+<div id="advertisementsContainer"><div class="empty">Loading advertisements...</div></div>
+</div>
+</div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+import {getDatabase,ref,push,set,update,remove,onValue} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCJZWhLYjvXRTJU5qK_P-3_IDYJW80TKs",
+    authDomain: "graduateplug-5ced9.firebaseapp.com",
+    databaseURL: "https://graduateplug-5ced9-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "graduateplug-5ced9",
+    storageBucket: "graduateplug-5ced9.firebasestorage.app",
+    messagingSenderId: "72019950240",
+    appId: "1:72019950240:web:4657b476d4421d636ae7c5"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const opportunitiesRef = ref(db,"Opportunities");
+const publicRef = ref(db,"Public");
+const advertisementsRef = ref(db,"Advertisements");
+const headlinersRef = ref(db,"Headliners");
+
+const CATEGORY_NODES = ["All","Job","Internship","Learnership","Bursary","WIL"];
+
+let opportunities = {};
+let publicNotices = {};
+let advertisements = {};
+let headliners = {};
+let editingHeadlinerId = null;
+let editingOpportunityId = null;
+let editingPublicId = null;
+let editingAdvertisementId = null;
+
+const $ = id => document.getElementById(id);
+
+function showMessage(text,type){
+    const message = $("message");
+    message.textContent = text;
+    message.className = "message " + type;
+    message.style.display = "block";
+    setTimeout(() => message.style.display = "none", 4000);
+}
+
+function escapeHTML(value){
+    return String(value ?? "")
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;").replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+function safeURL(url){
+    const v = String(url || "").trim();
+    return (v.startsWith("https://") || v.startsWith("http://")) ? v : "";
+}
+
+function typeClass(type){
+    return String(type || "").toLowerCase().replace(/[^a-z]/g,"");
+}
+
+function normalizedTypeNode(type){
+    const typeValue = String(type || "").trim();
+    return CATEGORY_NODES.includes(typeValue) ? typeValue : null;
+}
+
+/* Keep the database structure compatible with the nodes visible in the Firebase console:
+   Advertisements, All, Bursary, Internship, Learnership, Opportunities, Public, WIL.
+   Opportunities remains the canonical collection used by the public page. */
+function opportunityWritePaths(id,data,oldType=null){
+    const updates = {};
+    updates[`Opportunities/${id}`] = data;
+    updates[`All/${id}`] = data;
+
+    const newTypeNode = normalizedTypeNode(data.Type);
+    if(newTypeNode && newTypeNode !== "All"){
+        updates[`${newTypeNode}/${id}`] = data;
+    }
+
+    const oldTypeNode = normalizedTypeNode(oldType);
+    if(oldTypeNode && oldTypeNode !== "All" && oldTypeNode !== newTypeNode){
+        updates[`${oldTypeNode}/${id}`] = null;
+    }
+    return updates;
+}
+
+function opportunityDeletePaths(id,item){
+    const updates = {
+        [`Opportunities/${id}`]: null,
+        [`All/${id}`]: null
+    };
+    const typeNode = normalizedTypeNode(item?.Type);
+    if(typeNode && typeNode !== "All"){
+        updates[`${typeNode}/${id}`] = null;
+    }
+    return updates;
+}
+
+onValue(opportunitiesRef, snapshot => {
+    opportunities = snapshot.val() || {};
+    displayOpportunities();
+    $("connectionStatus").textContent = "Connected to GraduatePlug";
+}, error => {
+    console.error(error);
+    $("connectionStatus").textContent = "Firebase connection error";
+    showMessage("Unable to connect to Firebase: " + error.message,"error");
+});
+
+onValue(publicRef, snapshot => {
+    publicNotices = snapshot.val() || {};
+    displayPublicNotices();
+}, error => {
+    console.error(error);
+    $("publicContainer").innerHTML = '<div class="empty">Public notices are unavailable.</div>';
+});
+
+onValue(headlinersRef, snapshot => {
+    headliners = snapshot.val() || {};
+    displayHeadliners();
+}, error => {
+    console.error(error);
+    $("headlinersContainer").innerHTML = '<div class="empty">Headliners are unavailable.</div>';
+});
+
+onValue(advertisementsRef, snapshot => {
+    advertisements = snapshot.val() || {};
+    displayAdvertisements();
+}, error => {
+    console.error(error);
+    $("advertisementsContainer").innerHTML = '<div class="empty">Advertisements are unavailable.</div>';
+});
+
+function displayOpportunities(){
+    const search = $("opportunitySearch").value.toLowerCase().trim();
+    const selectedType = $("opportunityFilter").value;
+    const selectedProvince = $("provinceFilter").value;
+
+    const filtered = Object.entries(opportunities).filter(([id,item]) => {
+        const text = [
+            item.Title,item.Type,item.Qualification,item.Province,
+            item.Closing,item.Description,item.Requirements
+        ].join(" ").toLowerCase();
+
+        const typeMatch = !selectedType || String(item.Type || "") === selectedType;
+        const provinceMatch = !selectedProvince ||
+            String(item.Province || "") === selectedProvince ||
+            String(item.Province || "").toLowerCase() === "all";
+
+        return text.includes(search) && typeMatch && provinceMatch;
+    });
+
+    const container = $("opportunitiesContainer");
+    if(!filtered.length){
+        container.innerHTML = '<div class="empty">No opportunities found.</div>';
+        return;
+    }
+
+    container.innerHTML = "";
+    filtered.forEach(([id,item]) => {
+        const listing = document.createElement("div");
+        listing.className = "listing";
+
+        listing.innerHTML = `
+        <h3>${escapeHTML(item.Title || "Untitled Opportunity")}</h3>
+        <div class="meta">
+        ${item.Province ? escapeHTML(item.Province) : "Province not specified"}
+        ${item.Qualification ? " • " + escapeHTML(item.Qualification) : ""}
+        ${item.Closing ? " • Closing: " + escapeHTML(item.Closing) : ""}
+        </div>
+        <div><span class="badge ${typeClass(item.Type)}">${escapeHTML(item.Type || "Opportunity")}</span></div>
+        ${item.Description ? `<div class="description">${escapeHTML(item.Description)}</div>` : ""}
+        ${item.Requirements ? `<div class="requirements"><strong>Requirements:</strong><br>${escapeHTML(item.Requirements)}</div>` : ""}
+        <div class="listing-actions">
+        ${item.Link ? `<button class="btn-primary" data-link>Apply Link</button>` : ""}
+        <button class="btn-edit" data-edit>Edit</button>
+        <button class="btn-danger" data-delete>Delete</button>
+        </div>`;
+
+        if(item.Link) listing.querySelector("[data-link]").onclick = () => {
+            const link = safeURL(item.Link);
+            if(link) window.open(link,"_blank");
+        };
+        listing.querySelector("[data-edit]").onclick = () => editOpportunity(id);
+        listing.querySelector("[data-delete]").onclick = () => deleteOpportunity(id);
+        container.appendChild(listing);
+    });
+}
+
+$("opportunityForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const now = new Date().toISOString();
+    const existing = editingOpportunityId ? opportunities[editingOpportunityId] : null;
+
+    const data = {
+        Title: $("title").value.trim(),
+        Type: $("type").value,
+        Province: $("province").value,
+        Qualification: $("qualification").value.trim(),
+        Closing: $("closing").value.trim(),
+        Description: $("description").value.trim(),
+        Requirements: $("requirements").value.trim(),
+        Link: $("link").value.trim(),
+        createdAt: existing?.createdAt || now,
+        updatedAt: now
+    };
+
+    try{
+        if(editingOpportunityId){
+            const updates = opportunityWritePaths(editingOpportunityId, data, existing?.Type);
+            await update(ref(db), updates);
+            showMessage("Opportunity updated and category nodes synchronized.","success");
+        }else{
+            const newRef = push(opportunitiesRef);
+            const id = newRef.key;
+            const updates = opportunityWritePaths(id, data);
+            await update(ref(db), updates);
+            showMessage("Opportunity added and database category nodes synchronized.","success");
+        }
+        resetOpportunityForm();
+    }catch(error){
+        console.error(error);
+        showMessage("Error saving opportunity: " + error.message,"error");
+    }
+});
+
+function editOpportunity(id){
+    const item = opportunities[id];
+    if(!item) return;
+    editingOpportunityId = id;
+
+    $("title").value = item.Title || "";
+    $("type").value = item.Type || "";
+    $("province").value = item.Province || "";
+    $("qualification").value = item.Qualification || "";
+    $("closing").value = item.Closing || "";
+    $("description").value = item.Description || "";
+    $("requirements").value = item.Requirements || "";
+    $("link").value = item.Link || "";
+
+    $("opportunityFormTitle").textContent = "Edit Opportunity";
+    $("saveOpportunity").textContent = "Update Opportunity";
+    $("cancelOpportunity").classList.remove("hidden");
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function deleteOpportunity(id){
+    const item = opportunities[id];
+    if(!item) return;
+    if(!confirm(`Delete "${item.Title || "this opportunity"}" from all synchronized category nodes?`)) return;
+
+    try{
+        await update(ref(db), opportunityDeletePaths(id,item));
+        showMessage("Opportunity deleted from synchronized nodes.","success");
+    }catch(error){
+        console.error(error);
+        showMessage("Error deleting opportunity: " + error.message,"error");
+    }
+}
+
+function resetOpportunityForm(){
+    editingOpportunityId = null;
+    $("opportunityForm").reset();
+    $("opportunityFormTitle").textContent = "Add Opportunity";
+    $("saveOpportunity").textContent = "Add Opportunity";
+    $("cancelOpportunity").classList.add("hidden");
+}
+
+$("cancelOpportunity").onclick = resetOpportunityForm;
+$("opportunitySearch").oninput = displayOpportunities;
+$("opportunityFilter").onchange = displayOpportunities;
+$("provinceFilter").onchange = displayOpportunities;
+
+
+/* Mixed opportunity importer: classify pasted records into the same Firebase schema. */
+const KNOWN_PROVINCES = [
+    "Mpumalanga","Limpopo","Gauteng","KZN","KwaZulu-Natal","Western Cape",
+    "Eastern Cape","Free State","North West","North-West","Northern Cape"
+];
+
+function normalizeProvince(value){
+    const text = String(value || "").trim();
+    const lower = text.toLowerCase();
+
+    if(lower.includes("kwazulu") || lower === "kzn") return "KZN";
+    if(lower.includes("north-west") || lower === "north west") return "North West";
+
+    const found = KNOWN_PROVINCES.find(p => lower.includes(p.toLowerCase()));
+    return found || (lower.includes("national") || lower.includes("south africa") ? "All" : "");
+}
+
+function detectType(text){
+    const lower = String(text || "").toLowerCase();
+
+    if(/\bwil\b|\bwork integrated learning\b|\bwork-integrated learning\b/.test(lower)) return "WIL";
+    if(/\blearnership\b|\blearner\b/.test(lower)) return "Learnership";
+    if(/\binternship\b|\bintern\b|\bgraduate programme\b|\bgraduate program\b/.test(lower)) return "Internship";
+    if(/\bbursary\b|\bscholarship\b|\bstudy funding\b/.test(lower)) return "Bursary";
+    if(/\bjob\b|\bvacancy\b|\bposition\b|\bcareer\b|\bemployment\b|\bassistant\b|\bofficer\b|\bmanager\b|\bclerk\b/.test(lower)) return "Job";
+
+    return "Job";
+}
+
+function extractLink(text){
+    const match = String(text || "").match(/https?:\/\/[^\s<>"')]+/i);
+    return match ? match[0].replace(/[.,;]+$/,"") : "";
+}
+
+function extractProvince(text){
+    const lower = String(text || "").toLowerCase();
+    for(const province of KNOWN_PROVINCES){
+        if(lower.includes(province.toLowerCase())){
+            return normalizeProvince(province);
+        }
+    }
+    if(/\bnational\b|\bsouth africa\b/.test(lower)) return "All";
+    return "";
+}
+
+function extractLabeledValue(lines, labels){
+    for(const line of lines){
+        const clean = line.trim();
+        for(const label of labels){
+            const regex = new RegExp("^" + label + "\\s*[:\\-]\\s*(.+)$","i");
+            const match = clean.match(regex);
+            if(match) return match[1].trim();
+        }
+    }
+    return "";
+}
+
+function extractClosing(text){
+    return extractLabeledValue(String(text).split(/\r?\n/), [
+        "closing","closing date","deadline","application closes","applications close"
+    ]);
+}
+
+function extractQualification(text){
+    return extractLabeledValue(String(text).split(/\r?\n/), [
+        "qualification","qualifications","education","minimum qualification"
+    ]);
+}
+
+function extractRequirements(text){
+    const lines = String(text || "").split(/\r?\n/);
+    const start = lines.findIndex(line => /^\s*(requirements?|eligibility|minimum requirements?)\s*[:\-]?/i.test(line));
+    if(start === -1) return "";
+
+    const first = lines[start].replace(/^\s*(requirements?|eligibility|minimum requirements?)\s*[:\-]?\s*/i,"").trim();
+    const collected = first ? [first] : [];
+
+    for(let i=start+1;i<lines.length;i++){
+        const line = lines[i].trim();
+        if(!line) break;
+        if(/^(closing|closing date|deadline|apply|application|link|province|location|qualification|qualifications)\s*[:\-]/i.test(line)) break;
+        collected.push(line);
+    }
+    return collected.join("\n").trim();
+}
+
+function extractTitle(lines, fullText){
+    for(const line of lines){
+        const clean = line.trim();
+        const lower = clean.toLowerCase();
+        if(!clean) continue;
+        if(/^(job|internship|intern|learnership|bursary|wil|work integrated learning)$/i.test(clean)) continue;
+        if(KNOWN_PROVINCES.some(p => lower === p.toLowerCase())) continue;
+        if(/^(all|national|south africa)$/i.test(clean)) continue;
+        if(/^(province|location|qualification|qualifications|closing|closing date|deadline|requirements?|eligibility|apply|application|link)\s*[:\-]/i.test(clean)) continue;
+        if(/^https?:\/\//i.test(clean)) continue;
+        return clean;
+    }
+    return "Untitled Opportunity";
+}
+
+function parseMixedOpportunityBlock(block){
+    const text = String(block || "").trim();
+    const lines = text.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+
+    const province = normalizeProvince(extractLabeledValue(lines, ["province","location"]) || extractProvince(text));
+    const qualification = extractQualification(text);
+    const closing = extractClosing(text);
+    const requirements = extractRequirements(text);
+    const link = extractLink(text);
+    const type = detectType(text);
+
+    const filteredLines = lines.filter(line => {
+        return !/^(province|location|qualification|qualifications|closing|closing date|deadline|requirements?|eligibility|apply|application|link)\s*[:\-]/i.test(line);
+    });
+
+    const title = extractTitle(filteredLines, text);
+
+    const descriptionLines = lines.filter(line => {
+        const lower = line.toLowerCase();
+        return line !== title &&
+            !/^(job|internship|intern|learnership|bursary|wil|work integrated learning)$/i.test(line) &&
+            !/^(province|location|qualification|qualifications|closing|closing date|deadline|requirements?|eligibility|apply|application|link)\s*[:\-]/i.test(line) &&
+            !/^https?:\/\//i.test(line) &&
+            !KNOWN_PROVINCES.some(p => lower === p.toLowerCase()) &&
+            !/^(all|national|south africa)$/i.test(line);
+    });
+
+    const description = descriptionLines.join("\n").trim();
+
+    return {
+        Title: title,
+        Type: type,
+        Province: province || "All",
+        Qualification: qualification,
+        Closing: closing,
+        Description: description,
+        Requirements: requirements,
+        Link: link
+    };
+}
+
+function splitMixedOpportunities(raw){
+    const normalized = String(raw || "").replace(/\r\n/g,"\n").trim();
+    if(!normalized) return [];
+
+    let blocks = normalized.split(/\n\s*---+\s*\n/g).map(x => x.trim()).filter(Boolean);
+    if(blocks.length > 1) return blocks;
+
+    /* Blank-line separated records are supported. */
+    blocks = normalized.split(/\n\s*\n+/g).map(x => x.trim()).filter(Boolean);
+    return blocks.length ? blocks : [normalized];
+}
+
+function previewMixedOpportunities(){
+    const raw = $("mixedOpportunityText").value.trim();
+    const preview = $("mixedPreview");
+
+    if(!raw){
+        preview.className = "";
+        preview.innerHTML = '<div class="empty">Paste mixed opportunity information first.</div>';
+        return [];
+    }
+
+    const parsed = splitMixedOpportunities(raw).map(parseMixedOpportunityBlock);
+    preview.className = "";
+    preview.innerHTML = `
+        <div class="note"><strong>${parsed.length}</strong> opportunity record(s) detected.</div>
+        ${parsed.map((item,index) => `
+            <div class="listing">
+                <h3>${index + 1}. ${escapeHTML(item.Title)}</h3>
+                <div class="meta">
+                    <span class="badge ${typeClass(item.Type)}">${escapeHTML(item.Type)}</span>
+                    ${escapeHTML(item.Province || "All")}
+                    ${item.Qualification ? " • " + escapeHTML(item.Qualification) : ""}
+                    ${item.Closing ? " • Closing: " + escapeHTML(item.Closing) : ""}
+                </div>
+                ${item.Requirements ? `<div class="requirements"><strong>Requirements:</strong><br>${escapeHTML(item.Requirements)}</div>` : ""}
+                ${item.Link ? `<div class="meta">Apply: ${escapeHTML(item.Link)}</div>` : ""}
+            </div>
+        `).join("")}
+    `;
+    return parsed;
+}
+
+$("previewMixedOpportunities").addEventListener("click", previewMixedOpportunities);
+
+$("mixedOpportunityForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const parsed = previewMixedOpportunities();
+    if(!parsed.length) return;
+
+    const now = new Date().toISOString();
+    const rootUpdates = {};
+    let saved = 0;
+
+    parsed.forEach((item,index) => {
+        const newRef = push(opportunitiesRef);
+        const id = newRef.key;
+        const data = {
+            ...item,
+            Source: "Mixed Import",
+            createdAt: now,
+            updatedAt: now
+        };
+
+        Object.assign(rootUpdates, opportunityWritePaths(id, data));
+        saved++;
+    });
+
+    try{
+        await update(ref(db), rootUpdates);
+        showMessage(`${saved} mixed opportunity record(s) added and automatically classified/synchronized.`, "success");
+        $("mixedOpportunityForm").reset();
+        $("mixedPreview").className = "hidden";
+        $("mixedPreview").innerHTML = "";
+    }catch(error){
+        console.error(error);
+        showMessage("Error importing mixed opportunities: " + error.message, "error");
+    }
+});
+
+function displayPublicNotices(){
+    const search = $("publicSearch").value.toLowerCase().trim();
+
+    const filtered = Object.entries(publicNotices).filter(([id,item]) => {
+        const text = [
+            item.Title,item.Category,item.Location,item.DatePosted,item.Description
+        ].join(" ").toLowerCase();
+        return text.includes(search);
+    });
+
+    const container = $("publicContainer");
+    if(!filtered.length){
+        container.innerHTML = '<div class="empty">No public notices found.</div>';
+        return;
+    }
+
+    container.innerHTML = "";
+    filtered.forEach(([id,item]) => {
+        const listing = document.createElement("div");
+        listing.className = "listing";
+
+        listing.innerHTML = `
+        <h3>${escapeHTML(item.Title || "Public Notice")}</h3>
+        <div class="meta">
+        ${item.Category ? "Category: " + escapeHTML(item.Category) : ""}
+        ${item.Location ? " • " + escapeHTML(item.Location) : ""}
+        ${item.DatePosted ? " • Posted: " + escapeHTML(item.DatePosted) : ""}
+        </div>
+        ${item.Description ? `<div class="description">${escapeHTML(item.Description)}</div>` : ""}
+        <div class="listing-actions">
+        ${item.Link ? `<button class="btn-primary" data-link>View More</button>` : ""}
+        <button class="btn-edit" data-edit>Edit</button>
+        <button class="btn-danger" data-delete>Delete</button>
+        </div>`;
+
+        if(item.Link) listing.querySelector("[data-link]").onclick = () => {
+            const link = safeURL(item.Link);
+            if(link) window.open(link,"_blank");
+        };
+        listing.querySelector("[data-edit]").onclick = () => editPublicNotice(id);
+        listing.querySelector("[data-delete]").onclick = () => deletePublicNotice(id);
+        container.appendChild(listing);
+    });
+}
+
+$("publicForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const now = new Date().toISOString();
+    const existing = editingPublicId ? publicNotices[editingPublicId] : null;
+
+    const data = {
+        Title: $("publicTitle").value.trim(),
+        Category: $("publicCategory").value.trim(),
+        Location: $("publicLocation").value.trim(),
+        DatePosted: $("publicDatePosted").value.trim(),
+        Description: $("publicDescription").value.trim(),
+        Link: $("publicLink").value.trim(),
+        createdAt: existing?.createdAt || now,
+        updatedAt: now
+    };
+
+    try{
+        if(editingPublicId){
+            await update(ref(db,`Public/${editingPublicId}`),data);
+            showMessage("Public notice updated successfully.","success");
+        }else{
+            const newRef = push(publicRef);
+            await set(newRef,data);
+            showMessage("Public notice added successfully.","success");
+        }
+        resetPublicForm();
+    }catch(error){
+        console.error(error);
+        showMessage("Error saving public notice: " + error.message,"error");
+    }
+});
+
+function editPublicNotice(id){
+    const item = publicNotices[id];
+    if(!item) return;
+    editingPublicId = id;
+
+    $("publicTitle").value = item.Title || "";
+    $("publicCategory").value = item.Category || "";
+    $("publicLocation").value = item.Location || "";
+    $("publicDatePosted").value = item.DatePosted || "";
+    $("publicDescription").value = item.Description || "";
+    $("publicLink").value = item.Link || "";
+
+    $("publicFormTitle").textContent = "Edit Public Notice";
+    $("savePublic").textContent = "Update Public Notice";
+    $("cancelPublic").classList.remove("hidden");
+    window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
+}
+
+async function deletePublicNotice(id){
+    const item = publicNotices[id];
+    if(!item) return;
+    if(!confirm(`Delete "${item.Title || "this public notice"}"?`)) return;
+
+    try{
+        await remove(ref(db,`Public/${id}`));
+        showMessage("Public notice deleted.","success");
+    }catch(error){
+        console.error(error);
+        showMessage("Error deleting public notice: " + error.message,"error");
+    }
+}
+
+function resetPublicForm(){
+    editingPublicId = null;
+    $("publicForm").reset();
+    $("publicFormTitle").textContent = "Add Public Notice";
+    $("savePublic").textContent = "Add Public Notice";
+    $("cancelPublic").classList.add("hidden");
+}
+
+$("cancelPublic").onclick = resetPublicForm;
+$("publicSearch").oninput = displayPublicNotices;
+
+function displayHeadliners(){
+    const search = $("headlinerSearch").value.toLowerCase().trim();
+    const filtered = Object.entries(headliners).filter(([id,item]) =>
+        [item.Title,item.Category,item.Summary,item.Description,item.Link].join(" ").toLowerCase().includes(search)
+    );
+    const container = $("headlinersContainer");
+    if(!filtered.length){ container.innerHTML = '<div class="empty">No headliners found.</div>'; return; }
+    container.innerHTML = "";
+    filtered.forEach(([id,item]) => {
+        const listing = document.createElement("div");
+        listing.className = "listing";
+        listing.innerHTML = `<h3>${escapeHTML(item.Title || "Untitled Headliner")}</h3>
+        <div class="meta">${escapeHTML(item.Category || "")}</div>
+        ${item.Image ? `<img src="${escapeHTML(item.Image)}" alt="" style="display:block;max-width:100%;max-height:140px;object-fit:cover;border-radius:8px;margin:8px 0;">` : ""}
+        ${item.Summary ? `<div class="description">${escapeHTML(item.Summary)}</div>` : ""}
+        <div class="listing-actions">
+        ${item.Link ? `<button class="btn-primary" data-link>Open Link</button>` : ""}
+        <button class="btn-edit" data-edit>Edit</button><button class="btn-danger" data-delete>Delete</button></div>`;
+        if(item.Link) listing.querySelector("[data-link]").onclick = () => { const u=safeURL(item.Link); if(u) window.open(u,"_blank"); };
+        listing.querySelector("[data-edit]").onclick = () => editHeadliner(id);
+        listing.querySelector("[data-delete]").onclick = () => deleteHeadliner(id);
+        container.appendChild(listing);
+    });
+}
+
+$("headlinerForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const now = new Date().toISOString();
+    const existing = editingHeadlinerId ? headliners[editingHeadlinerId] : null;
+    const data = {
+        Title: $("headlinerTitle").value.trim(),
+        Category: $("headlinerCategory").value.trim(),
+        Summary: $("headlinerSummary").value.trim(),
+        Image: $("headlinerImage").value.trim(),
+        Link: $("headlinerLink").value.trim(),
+        createdAt: existing?.createdAt || now,
+        updatedAt: now
+    };
+    try{
+        if(editingHeadlinerId){
+            await update(ref(db,`Headliners/${editingHeadlinerId}`),data);
+            showMessage("Headliner updated successfully.","success");
+        }else{
+            const newRef = push(headlinersRef);
+            await set(newRef,data);
+            showMessage("Headliner published. It will appear on the Index automatically.","success");
+        }
+        resetHeadlinerForm();
+    }catch(error){ console.error(error); showMessage("Error saving headliner: " + error.message,"error"); }
+});
+
+function editHeadliner(id){
+    const item=headliners[id]; if(!item) return;
+    editingHeadlinerId=id;
+    $("headlinerTitle").value=item.Title||"";
+    $("headlinerCategory").value=item.Category||"";
+    $("headlinerSummary").value=item.Summary||item.Description||"";
+    $("headlinerImage").value=item.Image||"";
+    $("headlinerLink").value=item.Link||"";
+    $("headlinerFormTitle").textContent="Edit Headliner";
+    $("saveHeadliner").textContent="Update Headliner";
+    $("cancelHeadliner").classList.remove("hidden");
+    $("headlinerFormCard").scrollIntoView({behavior:"smooth",block:"start"});
+}
+async function deleteHeadliner(id){
+    const item=headliners[id]; if(!item) return;
+    if(!confirm(`Delete "${item.Title||"this headliner"}"?`)) return;
+    try{ await remove(ref(db,`Headliners/${id}`)); showMessage("Headliner deleted.","success"); }
+    catch(error){ console.error(error); showMessage("Error deleting headliner: " + error.message,"error"); }
+}
+function resetHeadlinerForm(){
+    editingHeadlinerId=null; $("headlinerForm").reset();
+    $("headlinerFormTitle").textContent="Add Headliner";
+    $("saveHeadliner").textContent="Publish Headliner";
+    $("cancelHeadliner").classList.add("hidden");
+}
+$("cancelHeadliner").onclick=resetHeadlinerForm;
+$("headlinerSearch").oninput=displayHeadliners;
+
+/* Advertisements */
+function displayAdvertisements(){
+    const search = $("advertisementSearch").value.toLowerCase().trim();
+
+    const filtered = Object.entries(advertisements).filter(([id,item]) => {
+        const text = [
+            item["Business name"], item.BusinessName, item.businessName, item.Title,
+            item.Category, item.Contact, item.Location, item.Description, item.Link
+        ].join(" ").toLowerCase();
+        return text.includes(search);
+    });
+
+    const container = $("advertisementsContainer");
+    if(!filtered.length){
+        container.innerHTML = '<div class="empty">No advertisements found.</div>';
+        return;
+    }
+
+    container.innerHTML = "";
+    filtered.forEach(([id,item]) => {
+        const listing = document.createElement("div");
+        listing.className = "listing";
+
+        const business = item["Business name"] || item.BusinessName || item.businessName || item.Title || "Advertisement";
+        const category = item.Category || "";
+        const contact = item.Contact || "";
+        const location = item.Location || "";
+        const description = item.Description || "";
+        const link = safeURL(item.Link);
+        const image = safeURL(item.Image);
+
+        listing.innerHTML = `
+        ${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(business)}" style="display:block;max-width:100%;max-height:140px;object-fit:cover;border-radius:8px;margin-bottom:10px;">` : ""}
+        <h3>${escapeHTML(business)}</h3>
+        <div class="meta">
+            ${category ? "Category: " + escapeHTML(category) : ""}
+            ${location ? (category ? " • " : "") + "Location: " + escapeHTML(location) : ""}
+            ${contact ? " • Contact: " + escapeHTML(contact) : ""}
+        </div>
+        ${description ? `<div class="description">${escapeHTML(description)}</div>` : ""}
+        <div class="listing-actions">
+        ${link ? `<button class="btn-primary" data-link>Open Link</button>` : ""}
+        <button class="btn-edit" data-edit>Edit</button>
+        <button class="btn-danger" data-delete>Delete</button>
+        </div>`;
+
+        if(item.Link) listing.querySelector("[data-link]").onclick = () => {
+            const safe = safeURL(item.Link);
+            if(safe) window.open(safe,"_blank");
+        };
+        listing.querySelector("[data-edit]").onclick = () => editAdvertisement(id);
+        listing.querySelector("[data-delete]").onclick = () => deleteAdvertisement(id);
+        container.appendChild(listing);
+    });
+}
+
+$("advertisementForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const now = new Date().toISOString();
+    const existing = editingAdvertisementId ? advertisements[editingAdvertisementId] : null;
+
+    const data = {
+        "Business name": $("adBusinessName").value.trim(),
+        Category: $("adCategory").value.trim(),
+        Contact: $("adContact").value.trim(),
+        Location: $("adLocation").value.trim(),
+        Description: $("adDescription").value.trim(),
+        Image: $("adImage").value.trim(),
+        Link: $("adLink").value.trim(),
+        createdAt: existing?.createdAt || now,
+        updatedAt: now
+    };
+
+    try{
+        if(editingAdvertisementId){
+            await update(ref(db,`Advertisements/${editingAdvertisementId}`),data);
+            showMessage("Advertisement updated successfully.","success");
+        }else{
+            const newRef = push(advertisementsRef);
+            await set(newRef,data);
+            showMessage("Advertisement added. It will appear on the public page automatically.","success");
+        }
+        resetAdvertisementForm();
+    }catch(error){
+        console.error(error);
+        showMessage("Error saving advertisement: " + error.message,"error");
+    }
+});
+
+function editAdvertisement(id){
+    const item = advertisements[id];
+    if(!item) return;
+    editingAdvertisementId = id;
+
+    $("adBusinessName").value = item["Business name"] || item.BusinessName || item.businessName || item.Title || "";
+    $("adCategory").value = item.Category || "";
+    $("adContact").value = item.Contact || "";
+    $("adLocation").value = item.Location || "";
+    $("adDescription").value = item.Description || "";
+    $("adImage").value = item.Image || "";
+    $("adLink").value = item.Link || "";
+
+    $("advertisementFormTitle").textContent = "Edit Advertisement";
+    $("saveAdvertisement").textContent = "Update Advertisement";
+    $("cancelAdvertisement").classList.remove("hidden");
+    window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
+}
+
+async function deleteAdvertisement(id){
+    const item = advertisements[id];
+    if(!item) return;
+    if(!confirm(`Delete "${item["Business name"] || item.BusinessName || item.Title || "this advertisement"}"?`)) return;
+
+    try{
+        await remove(ref(db,`Advertisements/${id}`));
+        showMessage("Advertisement deleted from Firebase.","success");
+    }catch(error){
+        console.error(error);
+        showMessage("Error deleting advertisement: " + error.message,"error");
+    }
+}
+
+function resetAdvertisementForm(){
+    editingAdvertisementId = null;
+    $("advertisementForm").reset();
+    $("advertisementFormTitle").textContent = "Add Advertisement";
+    $("saveAdvertisement").textContent = "Add Advertisement";
+    $("cancelAdvertisement").classList.add("hidden");
+}
+
+$("openAdvertisementForm").onclick = () => {
+    $("advertisementFormCard").scrollIntoView({behavior:"smooth", block:"start"});
+    $("adBusinessName").focus();
+};
+
+$("cancelAdvertisement").onclick = resetAdvertisementForm;
+$("advertisementSearch").oninput = displayAdvertisements;
+/* Cloudinary Advertisement Media Manager
+   Firebase structure for every upload:
+   Advertisement Media
+     -uniqueId
+       Description
+       Media
+       Media category
+       Media type
+       Title
+*/
+const CLOUDINARY_CLOUD_NAME = "jhngpg73";
+const CLOUDINARY_UPLOAD_PRESET = "graduateplug_admin";
+const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
+const advertisementMediaRef = ref(db,"Advertisement Media");
+
+let advertisementMediaLibrary = {};
+
+function normalizeAdvertisementMedia(data){
+    if(!data || typeof data !== "object") return {};
+
+    // Keep compatibility with the old single-record structure:
+    // Advertisement Media -> Description, Media, Media category, Media type, Title
+    if(data.Media){
+        return {legacy:data};
+    }
+
+    return Object.fromEntries(
+        Object.entries(data).filter(([id,item]) => item && typeof item === "object" && item.Media)
+    );
+}
+
+onValue(advertisementMediaRef, snapshot => {
+    advertisementMediaLibrary = normalizeAdvertisementMedia(snapshot.val());
+    displayAdvertisementMediaLibrary();
+}, error => {
+    console.error(error);
+    $("mediaContainer").innerHTML = '<div class="empty">Advertisement media is unavailable.</div>';
+});
+
+function advertisementMediaIsVideo(item){
+    return String(item?.["Media type"] || "").toLowerCase() === "video";
+}
+
+function renderAdvertisementMediaPreview(item, admin=false){
+    const url = safeURL(item?.Media);
+    if(!url) return "";
+
+    if(advertisementMediaIsVideo(item)){
+        return `<video class="${admin ? "media-list-preview" : "media-upload-preview"}"
+            src="${escapeHTML(url)}" controls preload="metadata" playsinline></video>`;
+    }
+
+    return `<img class="${admin ? "media-list-preview" : "media-upload-preview"}"
+        src="${escapeHTML(url)}" alt="${escapeHTML(item?.Title || "Advertisement Media")}" loading="lazy">`;
+}
+
+function displayAdvertisementMediaLibrary(){
+    const search = $("mediaSearch") ? $("mediaSearch").value.toLowerCase().trim() : "";
+    const entries = Object.entries(advertisementMediaLibrary).filter(([id,item]) => {
+        const text = [
+            item.Title,
+            item.Description,
+            item["Media category"],
+            item["Media type"]
+        ].join(" ").toLowerCase();
+        return text.includes(search);
+    });
+
+    const container = $("mediaContainer");
+    if(!entries.length){
+        container.innerHTML = '<div class="empty">No advertisement media uploaded yet.</div>';
+        return;
+    }
+
+    container.innerHTML = "";
+    entries.forEach(([id,item]) => {
+        const listing = document.createElement("div");
+        listing.className = "listing";
+        listing.innerHTML = `
+            ${renderAdvertisementMediaPreview(item,true)}
+            <h3>${escapeHTML(item.Title || "Advertisement Media")}</h3>
+            <div class="meta">
+                <span class="media-category-badge">Advertisement</span>
+                <span class="media-badge">${escapeHTML(item["Media type"] || "media")}</span>
+            </div>
+            ${item.Description ? `<div class="description">${escapeHTML(item.Description)}</div>` : ""}
+            <div class="listing-actions">
+                <button class="btn-primary" data-open>Open Media</button>
+                <button class="btn-danger" data-delete>Delete Media</button>
+            </div>
+        `;
+
+        listing.querySelector("[data-open]").onclick = () => {
+            const u = safeURL(item.Media);
+            if(u) window.open(u,"_blank");
+        };
+        listing.querySelector("[data-delete]").onclick = () => deleteAdvertisementMedia(id);
+        container.appendChild(listing);
+    });
+}
+
+async function uploadToCloudinary(file){
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+    formData.append("folder", "graduateplug");
+
+    const response = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: "POST",
+        body: formData
+    });
+
+    const result = await response.json();
+    if(!response.ok || !result.secure_url){
+        throw new Error(result?.error?.message || "Cloudinary upload failed.");
+    }
+    return result;
+}
+
+$("mediaFile").addEventListener("change", () => {
+    const file = $("mediaFile").files[0];
+    const preview = $("mediaPreview");
+    if(!file){
+        preview.className = "advertisement-admin-preview hidden";
+        preview.innerHTML = "";
+        return;
+    }
+
+    const objectURL = URL.createObjectURL(file);
+    preview.className = "advertisement-admin-preview";
+    preview.innerHTML = file.type.startsWith("video/")
+        ? `<video class="media-upload-preview" src="${escapeHTML(objectURL)}" controls playsinline></video>`
+        : `<img class="media-upload-preview" src="${escapeHTML(objectURL)}" alt="Preview">`;
+});
+
+$("mediaForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const file = $("mediaFile").files[0];
+    const title = $("mediaTitle").value.trim();
+    const selectedType = $("mediaType").value;
+
+    if(!file || !title || !selectedType){
+        showMessage("Please complete the required media fields.","error");
+        return;
+    }
+
+    const actualType = file.type.startsWith("video/") ? "video" : "image";
+    if(actualType !== selectedType){
+        showMessage(`The selected file is a ${actualType}. Please choose ${actualType} as the Media Type.`,"error");
+        return;
+    }
+
+    const button = $("uploadMedia");
+    button.disabled = true;
+    button.textContent = "Uploading...";
+
+    try{
+        const cloudinary = await uploadToCloudinary(file);
+        const newRef = push(advertisementMediaRef);
+
+        // IMPORTANT: Every upload gets its own child record under Advertisement Media.
+        // Field names match the structure requested exactly.
+        const data = {
+            Description: $("mediaDescription").value.trim(),
+            Media: cloudinary.secure_url,
+            "Media category": "Advertisement",
+            "Media type": actualType,
+            Title: title
+        };
+
+        await set(newRef, data);
+        showMessage("Advertisement media uploaded successfully. You can upload another one.","success");
+        $("mediaForm").reset();
+        $("mediaPreview").className = "advertisement-admin-preview hidden";
+        $("mediaPreview").innerHTML = "";
+    }catch(error){
+        console.error(error);
+        showMessage("Media upload failed: " + error.message,"error");
+    }finally{
+        button.disabled = false;
+        button.textContent = "Upload Media";
+    }
+});
+
+async function deleteAdvertisementMedia(id){
+    const item = advertisementMediaLibrary[id];
+    if(!item) return;
+
+    if(!confirm(`Delete "${item.Title || "this advertisement media"}" from Firebase?\n\nThe Cloudinary file will remain stored.`)) return;
+
+    try{
+        await remove(ref(db,`Advertisement Media/${id}`));
+        showMessage("Advertisement media deleted from Firebase.","success");
+    }catch(error){
+        console.error(error);
+        showMessage("Error deleting advertisement media: " + error.message,"error");
+    }
+}
+
+$("clearMediaForm").onclick = () => {
+    $("mediaForm").reset();
+    $("mediaPreview").className = "advertisement-admin-preview hidden";
+    $("mediaPreview").innerHTML = "";
+};
+
+$("mediaSearch").oninput = displayAdvertisementMediaLibrary;
+$("mediaCategoryFilter").onchange = displayAdvertisementMediaLibrary;
+
+/* Advertisements can now reference uploaded Cloudinary media by URL.
+   The existing advertisement Image field remains compatible with old records. */
+
+</script>
+</body>
+</html>
